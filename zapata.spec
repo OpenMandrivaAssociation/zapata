@@ -11,6 +11,7 @@ URL:            http://www.asterisk.org/
 Source0:	%{name}-%{version}.tar.bz2
 Source1:	zapata_Makefile.bz2
 Patch0:		zapata-1.0.0-mdk.diff
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 BuildRequires:	libtool
 
 %description
