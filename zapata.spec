@@ -1,18 +1,19 @@
-%define	major	1
-%define libname	%mklibname zap %{major}
+%define	major 1
+%define libname %mklibname zap %{major}
+%define develname %mklibname zap -d
 
 Summary:	Zapata Telecom Library
 Name:		zapata
 Version:	1.0.1
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
 Source0:	%{name}-%{version}.tar.bz2
-Source1:	zapata_Makefile.bz2
+Source1:	zapata_Makefile
 Patch0:		zapata-1.0.0-mdk.diff
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 BuildRequires:	libtool
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The Zapata library implements function calls allowing the user
@@ -28,15 +29,16 @@ Group:          System/Libraries
 The Zapata library implements function calls allowing the user
 easy access to the telephony functionality.
 
-%package -n	%{libname}-devel
+%package -n	%{develname}
 Summary:	Zapata Telecom Library development files
 Group:		Development/C
-Obsoletes:	%{name}-devel libzap-devel
+Requires:	%{libname} = %{version}
 Provides:	%{name}-devel = %{version}
 Provides:	libzap-devel = %{version}
-Requires:	%{libname} = %{version}
+Obsoletes:	%{name}-devel
+Obsoletes:	%{mklibname zap 1 -d}
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 The Zapata library implements function calls allowing the user
 easy access to the telephony functionality.
 
@@ -48,7 +50,7 @@ files for the Zapata Telecom Library.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 
-bzcat %{SOURCE1} > Makefile
+cp %{SOURCE1} Makefile
 
 %build
 
@@ -57,7 +59,7 @@ bzcat %{SOURCE1} > Makefile
     libdir=%{_libdir}
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %makeinstall_std \
     libdir=%{_libdir} \
@@ -72,16 +74,15 @@ bzcat %{SOURCE1} > Makefile
 %endif
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/*.so.*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
-
