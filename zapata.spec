@@ -5,7 +5,7 @@
 Summary:	Zapata Telecom Library
 Name:		zapata
 Version:	1.0.1
-Release:	%mkrel 7
+Release:	%mkrel 8
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
