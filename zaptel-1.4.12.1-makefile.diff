@@ -1,0 +1,38 @@
+--- zaptel-1.4.12.1/Makefile.orig	2012-03-25 14:21:44.721015332 -0400
++++ zaptel-1.4.12.1/Makefile	2012-03-25 14:22:04.771891049 -0400
+@@ -205,8 +205,8 @@ else
+ KMAKE  = $(MAKE) -C $(KSRC) ARCH=$(ARCH) SUBDIRS=$(PWD)/kernel \
+   HOTPLUG_FIRMWARE=$(HOTPLUG_FIRMWARE) KBUILD_OBJ_M="$(KBUILD_OBJ_M)"
+ endif
+-KMAKE_INST = $(KMAKE) \
+-  INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=misc modules_install
++#KMAKE_INST = $(KMAKE) \
++#  INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=misc modules_install
+ 
+ ROOT_PREFIX=
+ 
+@@ -295,7 +295,7 @@ GROFF_HTML	:= $(GROFF_PAGES:%=%.html)
+ all: menuselect.makeopts 
+ 	@$(MAKE) _all
+ 
+-_all: $(if $(BUILD_MODULES),modules) programs
++_all:  programs
+ 
+ libs: $(LTZ_SO) $(LTZ_A)
+ 
+@@ -523,15 +523,9 @@ ifneq (yes,$(DYNFS))
+ 	rm -f $(DESTDIR)/dev/zap/252
+ 	rm -f $(DESTDIR)/dev/zap/251
+ 	rm -f $(DESTDIR)/dev/zap/250
+-	mknod $(DESTDIR)/dev/zap/ctl c 196 0
+-	mknod $(DESTDIR)/dev/zap/transcode c 196 250
+-	mknod $(DESTDIR)/dev/zap/timer c 196 253
+-	mknod $(DESTDIR)/dev/zap/channel c 196 254
+-	mknod $(DESTDIR)/dev/zap/pseudo c 196 255
+ 	N=1; \
+ 	while [ $$N -lt 250 ]; do \
+ 		rm -f $(DESTDIR)/dev/zap/$$N; \
+-		mknod $(DESTDIR)/dev/zap/$$N c 196 $$N; \
+ 		N=$$[$$N+1]; \
+ 	done
+ else # DYNFS

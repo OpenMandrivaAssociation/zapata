@@ -1,28 +1,40 @@
-%define	major 1
+%define	major 1.0
+%define tone  1
 %define libname %mklibname zap %{major}
 %define develname %mklibname zap -d
 
 Summary:	Zapata Telecom Library
 Name:		zapata
-Version:	1.0.1
-Release:	9
+Version:	1.4.12.1
+Release:	%mkrel 7
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
-Source0:	%{name}-%{version}.tar.bz2
-Source1:	zapata_Makefile
-Patch0:		zapata-1.0.0-mdk.diff
+Source0:	zaptel-%{version}.tar.gz
+Source1:	autoconf.h
+Patch0:		zaptel-1.4.12.1-printf.diff
+Patch1:		zaptel-1.4.12.1-makefile.diff
+Patch2:		zaptel-1.4.12.1-firmware.diff
 BuildRequires:	libtool
+BuildRequires:	kernel-devel
+BuildRequires:	wget
 
 %description
 The Zapata library implements function calls allowing the user
 easy access to the telephony functionality.
 
+%package	firmware
+Summary:	Shared Zapata Telecom Library
+Group:          System/Libraries
+
+%description 	firmware
+The Zapata library implements function calls allowing the user
+easy access to the telephony functionality.  These are firmware files.
+
 %package -n	%{libname}
 Summary:	Shared Zapata Telecom Library
 Group:          System/Libraries
-#Obsoletes:	%{name}
-#Provides:	%{name}
+Requires:	zapata
 
 %description -n	%{libname}
 The Zapata library implements function calls allowing the user
@@ -32,8 +44,8 @@ easy access to the telephony functionality.
 Summary:	Zapata Telecom Library development files
 Group:		Development/C
 Requires:	%{libname} = %{version}
-Provides:	%{name}-devel = %{EVRD}
-Provides:	libzap-devel = %{EVRD}
+Provides:	%{name}-devel = %{version}
+Provides:	libzap-devel = %{version}
 Obsoletes:	%{name}-devel
 Obsoletes:	%{mklibname zap 1 -d}
 
@@ -44,83 +56,117 @@ easy access to the telephony functionality.
 This package contains the development library and its header
 files for the Zapata Telecom Library.
 
-%prep
-%setup -q -n %{name}-%{version}
-%patch0 -p1
+%package -n	perl-%{name}
+Summary:	Zapata Telecom Library perl files
+Group:		Development/Perl
+Provides:	%{name}-perl = %{version}
 
-cp %{SOURCE1} Makefile
+%description -n	perl-%{name}
+The Zapata library implements function calls allowing the user
+easy access to the telephony functionality.
+
+This package contains the perl library and its header
+files for the Zapata Telecom Library.
+
+%prep
+%setup -q -n zaptel-%{version}
+%patch0 -p1 -b .fprintf
+%patch1 -p1 -b .kernel
+%patch2 -p0 -b .firmware
+cp %{SOURCE1} .
 
 %build
+%configure2_5x --enable-static
 
 %make \
-    CFLAGS="%{optflags} -fPIC -DPIC -D_REENTRANT -Iinclude" \
+    CFLAGS="%{optflags} -fPIC -DPIC -D_REENTRANT -Iinclude -DSTANDALONE_ZAPATA -DZAPTEL_CONFIG=\"zaptel.conf\" -DCONFIG_FILENAME\"zaptel.conf\"" \
     libdir=%{_libdir}
 
 %install
+install -d %{buildroot}/%{_initrddir}
+install -d %{buildroot}/%{_sysconfdir}
+install -d %{buildroot}/etc/sysconfig
+install -m0644 zaptel.conf.sample %{buildroot}/%{_sysconfdir}/zaptel.conf
+install -m0755 zaptel.init %{buildroot}/%{_initrddir}/zaptel
+install -m0644 zaptel.sysconfig %{buildroot}/etc/sysconfig/zaptel
+rm -rf %{buildroot}
+
 %makeinstall_std \
     libdir=%{_libdir} \
-    includedir=%{_includedir}
+    includedir=%{_includedir} 
 
+# (cg) Fix udev rules location
+mkdir -p %{buildroot}/lib
+mv %{buildroot}%{_sysconfdir}/udev %{buildroot}/lib/
+
+%post
+%_post_service zaptel
+
+%preun
+%_preun_service zaptel
+
+%files
+%{_sysconfdir}/zaptel.conf
+#{_initrddir}/zaptel
+#%{_sysconfdir}/sysconfig/zaptel
+%{_sysconfdir}/hotplug/usb/xpp_fxloader
+%{_sysconfdir}/hotplug/usb/xpp_fxloader.usermap
+%{_udevrulesdir}/xpp.rules
+/sbin/fxotune
+/sbin/ztcfg
+/sbin/ztmonitor
+/sbin/ztscan
+/sbin/ztspeed
+/sbin/zttest
+/sbin/zttool
+%{_sbindir}/genzaptelconf
+%{_sbindir}/lszaptel
+%{_sbindir}/xpp_blink
+%{_sbindir}/xpp_sync
+%{_sbindir}/zaptel_hardware
+%{_sbindir}/zapconf
+%{_sbindir}/zt_registration
+%{_sbindir}/fpga_load
+%{_mandir}/man8/fxotune.8.xz
+%{_mandir}/man8/genzaptelconf.8.xz
+%{_mandir}/man8/lszaptel.8.xz
+%{_mandir}/man8/xpp_blink.8.xz
+%{_mandir}/man8/xpp_sync.8.xz
+%{_mandir}/man8/zapconf.8.xz
+%{_mandir}/man8/zaptel_hardware.8.xz
+%{_mandir}/man8/zt_registration.8.xz
+%{_mandir}/man8/ztcfg.8.xz
+%{_mandir}/man8/ztmonitor.8.xz
+%{_mandir}/man8/ztscan.8.xz
+%{_mandir}/man8/ztspeed.8.xz
+%{_mandir}/man8/zttest.8.xz
+%{_mandir}/man8/fpga*.8.xz
+%{_mandir}/man8/zttool.8.xz
+%{_datadir}/zaptel/FPGA_1141.hex
+%{_datadir}/zaptel/FPGA_1151.hex
+%{_datadir}/zaptel/FPGA_FXS.hex
+%{_datadir}/zaptel/USB_FW.hex
+%{_datadir}/zaptel/init_card_1_30
+%{_datadir}/zaptel/init_card_2_30
+%{_datadir}/zaptel/init_card_3_30
+%{_datadir}/zaptel/init_card_4_30
+%{_datadir}/zaptel/init_fxo_modes
+%{_datadir}/zaptel/xpp_fxloader
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/*.so.*
 
 %files -n %{develname}
 %{_includedir}/*
 %{_libdir}/*.so
+%{_libdir}/*.a
 
+%files -n perl-%{name}
+%{perl_sitelib}/Zaptel.pm
+%{perl_sitelib}/Zaptel
 
-%changelog
-* Wed Sep 09 2009 Thierry Vignaud <tvignaud@mandriva.com> 1.0.1-8mdv2010.0
-+ Revision: 435377
-- rebuild
-
-* Tue Jun 17 2008 Oden Eriksson <oeriksson@mandriva.com> 1.0.1-7mdv2009.0
-+ Revision: 223775
-- fix linkage
-- fix devel package naming
-
-  + Pixel <pixel@mandriva.com>
-    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
-
-* Thu Jan 03 2008 Olivier Blin <oblin@mandriva.com> 1.0.1-6mdv2008.1
-+ Revision: 141006
-- restore BuildRoot
-
-  + Thierry Vignaud <tvignaud@mandriva.com>
-    - kill re-definition of %%buildroot on Pixel's request
-
-
-* Thu Aug 03 2006 Oden Eriksson <oeriksson@mandriva.com> 1.0.1-6mdv2007.0
-- fix typo
-
-* Wed Aug 02 2006 Oden Eriksson <oeriksson@mandriva.com> 1.0.1-1mdv2007.0
-- rebuild
-
-* Sun May 07 2006 Stefan van der Eijk <stefan@eijk.nu> 1.0.1-4mdk
-- BuildRequires: libtool
-
-* Fri Sep 16 2005 Oden Eriksson <oeriksson@mandriva.com> 1.0.1-3mdk
-- maintain our own libtool aware makefile
-
-* Fri Sep 02 2005 Oden Eriksson <oeriksson@mandriva.com> 1.0.1-2mdk
-- rebuild
-
-* Thu Jul 21 2005 Nicolas Lécureuil <neoclust@mandriva.org> 1.0.1-1mdk
-- New release 1.0.1
-
-* Sun Mar 13 2005 Oden Eriksson <oeriksson@mandrakesoft.com> 1.0.0-3mdk
-- use the %%mkrel macro
-
-* Sun Dec 26 2004 Oden Eriksson <oeriksson@mandrakesoft.com> 1.0.0-2mdk
-- use newer zaptel header in P0
-- use also -DPIC -D_REENTRANT in CFLAGS
-
-* Fri Sep 24 2004 Oden Eriksson <oeriksson@mandrakesoft.com> 1.0.0-1mdk
-- 1.0.0
-- fix url
-
-* Sat Sep 11 2004 Oden Eriksson <oeriksson@mandrakesoft.com> 1.0-0.RC2.1mdk
-- initial mandrake package
-
+%files firmware
+/lib/firmware/.zaptel*
+/lib/firmware/zaptel*
+/usr/lib/hotplug/firmware/.zaptel*
+/usr/lib/hotplug/firmware/zaptel*

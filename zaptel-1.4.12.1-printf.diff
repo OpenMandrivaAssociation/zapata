@@ -1,0 +1,37 @@
+--- zaptel-1.4.12.1/ztcfg.c	2008-08-13 20:58:36.000000000 -0400
++++ zaptel-1.4.12.1.dlucio/ztcfg.c	2012-03-25 12:53:20.929691619 -0400
+@@ -55,7 +55,7 @@ static int lineno=0;
+ 
+ static FILE *cf;
+ 
+-static char *filename=CONFIG_FILENAME;
++static char *filename="zaptel.conf";
+ 
+ int rxtones[NUM_TONES + 1],rxtags[NUM_TONES + 1],txtones[NUM_TONES + 1];
+ int bursttime = 0, debouncetime = 0, invertcor = 0, exttone = 0, corthresh = 0;
+@@ -1259,17 +1259,14 @@ static void usage(char *argv0, int exitc
+ 		c = argv0;
+ 	else
+ 		c++;
+-	fprintf(stderr, 
+-		"Usage: %s [options]\n"
+-		"    Valid options are:\n"
+-		"  -c <filename>     -- Use <filename> instead of " CONFIG_FILENAME "\n"
+-		"  -d [level]        -- Generate debugging output. (Default level is 1.)\n"
+-		"  -f                -- Always reconfigure every channel\n"
+-		"  -h                -- Generate this help statement\n"
+-		"  -s                -- Shutdown spans only\n"
+-		"  -t                -- Test mode only, do not apply\n"
+-		"  -v                -- Verbose (more -v's means more verbose)\n"
+-	,c);
++	fprintf(stderr, "Usage: %s [options]\n\tValid options are:\n", c);
++	fprintf(stderr, "\t\t-c <filename>     -- Use <filename> instead of zaptel.conf\n");
++	fprintf(stderr, "\t\t-d [level]        -- Generate debugging output. (Default level is 1.)\n");
++	fprintf(stderr, "\t\t-f                -- Always reconfigure every channel\n");
++	fprintf(stderr, "\t\t-h                -- Generate this help statement\n");
++	fprintf(stderr, "\t\t-s                -- Shutdown spans only\n");
++	fprintf(stderr, "\t\t-t                -- Test mode only, do not apply\n");
++	fprintf(stderr, "\t\t-v                -- Verbose (more -v's means more verbose)\n");
+ 	exit(exitcode);
+ }
+ 

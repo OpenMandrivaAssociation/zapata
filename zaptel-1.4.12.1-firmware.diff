@@ -1,0 +1,10 @@
+--- Makefile	2008-09-08 19:32:08.000000000 -0400
++++ Makefile.dlucio	2013-08-23 22:26:41.357545280 -0400
+@@ -76,6 +76,7 @@ ifeq ($(BUILDVER),linux26)
+     HOTPLUG_FIRMWARE:=$(shell if grep -q '^CONFIG_FW_LOADER=[ym]' $(KCONFIG); then echo "yes"; else echo "no"; fi)
+   endif
+ endif
++HOTPLUG_FIRMWARE=yes
+ 
+ ifneq (,$(findstring $(CONFIG_DEVFS_FS),y m))
+   DYNFS=yes
