@@ -118,7 +118,6 @@ mv %{buildroot}%{_sysconfdir}/udev %{buildroot}/lib/
 /sbin/ztscan
 /sbin/ztspeed
 /sbin/zttest
-/sbin/zttool
 %{_sbindir}/genzaptelconf
 %{_sbindir}/lszaptel
 %{_sbindir}/xpp_blink
@@ -126,7 +125,6 @@ mv %{buildroot}%{_sysconfdir}/udev %{buildroot}/lib/
 %{_sbindir}/zaptel_hardware
 %{_sbindir}/zapconf
 %{_sbindir}/zt_registration
-%{_sbindir}/fpga_load
 %{_mandir}/man8/fxotune.8.xz
 %{_mandir}/man8/genzaptelconf.8.xz
 %{_mandir}/man8/lszaptel.8.xz
@@ -140,8 +138,6 @@ mv %{buildroot}%{_sysconfdir}/udev %{buildroot}/lib/
 %{_mandir}/man8/ztscan.8.xz
 %{_mandir}/man8/ztspeed.8.xz
 %{_mandir}/man8/zttest.8.xz
-%{_mandir}/man8/fpga*.8.xz
-%{_mandir}/man8/zttool.8.xz
 %{_datadir}/zaptel/FPGA_1141.hex
 %{_datadir}/zaptel/FPGA_1151.hex
 %{_datadir}/zaptel/FPGA_FXS.hex
