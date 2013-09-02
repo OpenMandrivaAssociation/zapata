@@ -76,7 +76,7 @@ files for the Zapata Telecom Library.
 cp %{SOURCE1} .
 
 %build
-%configure2_5x --enable-static
+%configure2_5x
 
 %make \
     CFLAGS="%{optflags} -fPIC -DPIC -D_REENTRANT -Iinclude -DSTANDALONE_ZAPATA -DZAPTEL_CONFIG=\"zaptel.conf\" -DCONFIG_FILENAME\"zaptel.conf\"" \
@@ -156,8 +156,6 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 
 %files -n %{develname}
 %{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/*.a
 
 %files -n perl-%{name}
 %{perl_sitelib}/Zaptel.pm
