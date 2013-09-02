@@ -6,7 +6,7 @@
 Summary:	Zapata Telecom Library
 Name:		zapata
 Version:	1.4.12.1
-Release:	8
+Release:	9
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
@@ -30,6 +30,15 @@ Group:          System/Libraries
 %description 	firmware
 The Zapata library implements function calls allowing the user
 easy access to the telephony functionality.  These are firmware files.
+
+%package -n	%{name}-tools
+Summary:	Shared Zapata Telecom Library
+Group:          Communications
+Requires:	%{libname} = %{version}
+
+%description -n	%{name}-tools
+The Zapata library implements function calls allowing the user
+easy access to the telephony functionality.  These are tools files.
 
 %package -n	%{libname}
 Summary:	Shared Zapata Telecom Library
@@ -111,9 +120,6 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 %{_sysconfdir}/zaptel.conf
 %{_initrddir}/zaptel
 %{_sysconfdir}/sysconfig/zaptel
-%{_sysconfdir}/hotplug/usb/xpp_fxloader
-%{_sysconfdir}/hotplug/usb/xpp_fxloader.usermap
-%{_udevrulesdir}/xpp.rules
 /sbin/fxotune
 /sbin/ztcfg
 /sbin/ztmonitor
@@ -122,16 +128,12 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 /sbin/zttest
 %{_sbindir}/genzaptelconf
 %{_sbindir}/lszaptel
-%{_sbindir}/xpp_blink
-%{_sbindir}/xpp_sync
 %{_sbindir}/zaptel_hardware
 %{_sbindir}/zapconf
 %{_sbindir}/zt_registration
 %{_mandir}/man8/fxotune.8.xz
 %{_mandir}/man8/genzaptelconf.8.xz
 %{_mandir}/man8/lszaptel.8.xz
-%{_mandir}/man8/xpp_blink.8.xz
-%{_mandir}/man8/xpp_sync.8.xz
 %{_mandir}/man8/zapconf.8.xz
 %{_mandir}/man8/zaptel_hardware.8.xz
 %{_mandir}/man8/zt_registration.8.xz
@@ -149,7 +151,16 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 %{_datadir}/zaptel/init_card_3_30
 %{_datadir}/zaptel/init_card_4_30
 %{_datadir}/zaptel/init_fxo_modes
+
+%files -n %{name}-tools
+%{_sbindir}/xpp_blink
+%{_sbindir}/xpp_sync
 %{_datadir}/zaptel/xpp_fxloader
+%{_mandir}/man8/xpp_blink.8.xz
+%{_mandir}/man8/xpp_sync.8.xz
+%{_udevrulesdir}/xpp.rules
+%{_sysconfdir}/hotplug/usb/xpp_fxloader
+%{_sysconfdir}/hotplug/usb/xpp_fxloader.usermap
 
 %files -n %{libname}
 %{_libdir}/*.so.*
