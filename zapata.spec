@@ -109,8 +109,8 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 
 %files
 %{_sysconfdir}/zaptel.conf
-#{_initrddir}/zaptel
-#%{_sysconfdir}/sysconfig/zaptel
+{_initrddir}/zaptel
+%{_sysconfdir}/sysconfig/zaptel
 %{_sysconfdir}/hotplug/usb/xpp_fxloader
 %{_sysconfdir}/hotplug/usb/xpp_fxloader.usermap
 %{_udevrulesdir}/xpp.rules
