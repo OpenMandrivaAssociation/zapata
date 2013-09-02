@@ -76,7 +76,7 @@ files for the Zapata Telecom Library.
 cp %{SOURCE1} .
 
 %build
-%configure2_5x
+%configure2_5x --disable-static
 
 %make \
     CFLAGS="%{optflags} -fPIC -DPIC -D_REENTRANT -Iinclude -DSTANDALONE_ZAPATA -DZAPTEL_CONFIG=\"zaptel.conf\" -DCONFIG_FILENAME\"zaptel.conf\"" \
