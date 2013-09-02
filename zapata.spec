@@ -6,7 +6,7 @@
 Summary:	Zapata Telecom Library
 Name:		zapata
 Version:	1.4.12.1
-Release:	%mkrel 7
+Release:	8
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
@@ -89,7 +89,6 @@ install -d %{buildroot}/etc/sysconfig
 install -m0644 zaptel.conf.sample %{buildroot}/%{_sysconfdir}/zaptel.conf
 install -m0755 zaptel.init %{buildroot}/%{_initrddir}/zaptel
 install -m0644 zaptel.sysconfig %{buildroot}/etc/sysconfig/zaptel
-rm -rf %{buildroot}
 
 %makeinstall_std \
     libdir=%{_libdir} \
@@ -98,6 +97,9 @@ rm -rf %{buildroot}
 # (cg) Fix udev rules location
 mkdir -p %{buildroot}/lib
 mv %{buildroot}%{_sysconfdir}/udev %{buildroot}/lib/
+# do not pack it 
+# it conflicts with tonezone-devel
+rm -f %{buildroot}/%{_libdir}/libtonezone.so
 
 %post
 %_post_service zaptel
