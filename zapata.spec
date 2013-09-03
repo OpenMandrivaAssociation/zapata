@@ -6,7 +6,7 @@
 Summary:	Zapata Telecom Library
 Name:		zapata
 Version:	1.4.12.1
-Release:	9
+Release:	10
 License:	GPL
 Group:		System/Libraries
 URL:            http://www.asterisk.org/
@@ -120,7 +120,6 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 %{_sysconfdir}/zaptel.conf
 %{_initrddir}/zaptel
 %{_sysconfdir}/sysconfig/zaptel
-/sbin/fxotune
 /sbin/ztcfg
 /sbin/ztmonitor
 /sbin/ztscan
@@ -131,7 +130,6 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 %{_sbindir}/zaptel_hardware
 %{_sbindir}/zapconf
 %{_sbindir}/zt_registration
-%{_mandir}/man8/fxotune.8.xz
 %{_mandir}/man8/genzaptelconf.8.xz
 %{_mandir}/man8/lszaptel.8.xz
 %{_mandir}/man8/zapconf.8.xz
@@ -153,11 +151,13 @@ rm -f %{buildroot}/%{_libdir}/libtonezone.so
 %{_datadir}/zaptel/init_fxo_modes
 
 %files -n %{name}-tools
+/sbin/fxotune
 %{_sbindir}/xpp_blink
 %{_sbindir}/xpp_sync
 %{_datadir}/zaptel/xpp_fxloader
 %{_mandir}/man8/xpp_blink.8.xz
 %{_mandir}/man8/xpp_sync.8.xz
+%{_mandir}/man8/fxotune.8.xz
 %{_udevrulesdir}/xpp.rules
 %{_sysconfdir}/hotplug/usb/xpp_fxloader
 %{_sysconfdir}/hotplug/usb/xpp_fxloader.usermap
