@@ -9,7 +9,7 @@ Version:	1.4.12.1
 Release:	16
 License:	GPL
 Group:		System/Libraries
-URL:            http://www.asterisk.org/
+URL:            https://www.asterisk.org/
 Source0:	zaptel-%{version}.tar.gz
 Source1:	autoconf.h
 Patch0:		zaptel-1.4.12.1-printf.diff
