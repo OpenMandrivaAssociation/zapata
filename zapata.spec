@@ -15,6 +15,11 @@ Source1:	autoconf.h
 Patch0:		zaptel-1.4.12.1-printf.diff
 Patch1:		zaptel-1.4.12.1-makefile.diff
 Patch2:		zaptel-1.4.12.1-firmware.diff
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	libtool
 BuildRequires:	kernel-devel
 BuildRequires:	wget
